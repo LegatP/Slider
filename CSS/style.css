@@ -1,0 +1,58 @@
+* {
+margin: 0;
+padding: 0;
+}
+
+#navigation {
+    position: relative;
+    height: 100px;
+    width:100%;
+    background-color:#262626;
+    padding:0;
+    margin:0;
+}
+
+#navigation ul {
+    position: absolute;
+    right: 20%;
+    bottom:0;
+}
+
+#navigation ul li {
+    background-color: #404040;
+    display: inline-block;
+    height: 35px;
+    min-width: 100px;
+    margin:0;
+    text-align: center;
+}
+
+#navigation ul li:hover {
+    background-color: #00e600;
+}
+
+#navigation ul li a {
+    display: block;
+    text-decoration: none;
+    color:#fff;
+    margin:0;
+    line-height: 35px;
+    height: inherit;
+    min-width: inherit;
+}
+
+#slider {
+    position: relative;
+    width: 50%;
+    margin-left: 25%;
+    margin-top:50px;
+    height: 400px;
+    background-color: red;
+    overflow:hidden;
+}
+
+#slider input{
+    position: absolute;
+    top:50%;
+}
+
