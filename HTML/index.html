@@ -17,11 +17,17 @@
         </ul>
     </div>
     <div id="slider">
-        <input style="left:25px" type="button" class="changeSlide" tag="previous"></button>
-        <input style="right:25px" type="button" class="changeSlide" tag="next"></button>
+        <input style="left:25px" type="button" class="changeSlide" tag="previous">
+        <input style="right:25px" type="button" class="changeSlide" tag="next">
+        <ul>
+            <li><input type="button" class="changeSlide" tag="1"></li>
+            <li><input type="button" class="changeSlide" tag="2"></li>
+            <li><input type="button" class="changeSlide" tag="3"></li>
+            <li><input type="button" class="changeSlide" tag="4"></li>
+        </ul>
         <div id="slide">
-            <img src="/slides/slide1.jpg" alt="" />
-            <img src="/slides/slide2.jpg" alt="" />
+            <img style="z-index:2" id="fade" src="/slides/slide1.jpg" />
+            <img style="z-index:1" src="/slides/slide2.jpg" />
         </div>
     </div>
 </body>
