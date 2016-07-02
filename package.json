@@ -1,0 +1,12 @@
+ {
+  "name": "Website_template",
+  "description": "Website template",
+  "author": "Primož Legat",
+  "dependencies": {
+    "express": "latest",
+    "express-session":"latest",
+    "fs":"latest",
+    "path": "latest",
+    "ejs": "latest",
+  }
+}
