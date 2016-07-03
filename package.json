@@ -7,6 +7,6 @@
     "express-session":"latest",
     "fs":"latest",
     "path": "latest",
-    "ejs": "latest",
+    "ejs": "latest"
   }
 }
