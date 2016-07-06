@@ -1,15 +1,17 @@
 $(document).ready(function(){
     var socket = io.connect();
-    var msgBox = $("#msgBox");
-    var msg = $("#msg");
-    var send = $("#send");
-    console.log("oj"); 
-    send.click(function(e){
-        socket.emit('send', msg.val());
-        msg.val('');   
+    var messagesWindow = $("#messagesWindow");
+    var messageInput = $("#messageInput");
+    var sendButton = $("#sendButton");
+    
+    sendButton.click(function(e){
+        socket.emit('send', messageInput.val());
+        messageInput.val('');
+        e.preventDefault();
     });
     
     socket.on('new message',function(data){
-        msgBox.append(data + "<br />");
+        var time = new Date();
+        messagesWindow.append(time.getHours() + ":" + time.getMinutes() + ":" + time.getSeconds() + "  " +  data + "<br />");
     });
 });

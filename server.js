@@ -5,13 +5,16 @@ var path = require('path');
 var http = require('http').createServer(app);
 var io = require('socket.io').listen(http);
 
+
+/* SOCKET.IO  */
+
 io.sockets.on('connection',function(socket){
     socket.on('send',function(data){
         io.sockets.emit('new message', data);
     });
 });
 
-
+/* WEBSITE ROUTING AND VISIT COUNT */
 
 var visits = 0;
 
