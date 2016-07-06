@@ -1,12 +1,13 @@
- {
+{
   "name": "Website_template",
   "description": "Website template",
   "author": "Primož Legat",
   "dependencies": {
+    "ejs": "latest",
     "express": "latest",
-    "express-session":"latest",
-    "fs":"latest",
+    "express-session": "latest",
+    "fs": "latest",
     "path": "latest",
-    "ejs": "latest"
+    "socket.io": "^1.4.8"
   }
 }
