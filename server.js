@@ -8,11 +8,51 @@ var io = require('socket.io').listen(http);
 
 /* SOCKET.IO  */
 
-io.sockets.on('connection',function(socket){
+var clientNumber = 0;
+var clients = [];
+
+io.on('connection',function(socket){
+    socket.nickname = assignNickname();
+
+    io.sockets.emit('update clients', clients);
+    
     socket.on('send',function(data){
-        io.sockets.emit('new message', data);
+        io.sockets.emit('new message', socket.nickname + ": " + data);
+    });
+    
+    socket.on('change nickname',function(newNickname){
+        if(containsNickname(newNickname)){
+            var notice = "<i>Please chose a unique nickname<i/>";
+            socket.emit('new message', notice);
+        }else{
+            clients[clients.indexOf(socket.nickname)] = newNickname;
+            socket.nickname = newNickname;
+            io.sockets.emit('update clients', clients);
+        }
+    });
+    
+    socket.on('disconnect',function(){
+        clients.splice(clients.indexOf(socket.nickname),1);
+        io.sockets.emit('update clients', clients);
     });
 });
+
+
+function assignNickname(){
+    var nickname = "Guest" + clientNumber;
+    clients.push(nickname);
+    clientNumber++;
+    return nickname;
+}
+
+function containsNickname(nickname){
+    for(var i in clients){
+        if(clients[i] == nickname){
+            return true;
+        }
+    }
+    return false;
+}
 
 /* WEBSITE ROUTING AND VISIT COUNT */
 

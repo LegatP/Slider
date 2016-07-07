@@ -170,8 +170,18 @@ body{
 }
 
 #messagesWindow{
-    width: 100%;
+    width: 80%;
     height: 500px;
+    float:left;
     border:1px solid black;
     overflow-y: scroll;
+    word-wrap: break-word;
+}
+
+#clientList{
+    width: 19%;
+    float:right;
+    height: 500px;
+    border:1px solid black;
+    word-wrap: break-word;
 }
