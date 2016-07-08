@@ -54,17 +54,7 @@ body{
     border:1px solid #777;
 }
 
-#slider input{
-    position: absolute;
-    top:50%;
-    z-index: 3;
-    border:none;
-    
-}
 
-#slider input:hover{
-    cursor:pointer;
-}
 
 #slider ul{
     position: absolute;
@@ -74,7 +64,13 @@ body{
 
 #slider ul li{
     display: inline-block;
-    margin-right:15px;
+    margin-right:18px;
+}
+
+#slider ul li img{
+    z-index:3;
+    width:12px;
+    cursor: pointer;
 }
 
 
