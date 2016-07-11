@@ -1,21 +1,32 @@
 $(document).ready(function(){
+    
     var socket = io.connect();
     var messagesWindow = $("#messagesWindow");
     var messageInput = $("#messageInput");
     var sendButton = $("#sendButton");
     var clientList = $("#clientList");
+    var roomsList = $("#channelList");
+    
+    socket.emit('change room', 'welcome');
     
     sendButton.click(function(e){
         e.preventDefault();
         if(!messageInput.val().trim()){
             /* Empty message */
-        }else if(messageInput.val().split(' ')[0] == ('/nickname')){
+        }else if(messageInput.val().split(' ')[0] === ('/nickname')){
             socket.emit('change nickname', capitalize(messageInput.val().split(' ')[1]));
+        }
+        else if(messageInput.val().split(' ')[0] === ('/room')){
+            socket.emit('change room', messageInput.val().split(' ')[1]);
         }
         else{
             socket.emit('send', messageInput.val());
         }
         messageInput.val('');
+    });
+    
+    socket.on('update rooms',function(){
+        
     });
     
     socket.on('update clients',function(nicknames){
@@ -25,6 +36,7 @@ $(document).ready(function(){
         }
         console.log("nic:" + nicknames);
     });
+    
     
     socket.on('new message',function(data){
         messagesWindow.append(data + "<br />");

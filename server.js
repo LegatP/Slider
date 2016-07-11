@@ -1,4 +1,6 @@
 var express = require('express');
+var escapeHTML = require('escape-html');
+var unescapeHTML = require('unescape-html');
 var app = express();
 var ejs = require('ejs');
 var path = require('path');
@@ -10,19 +12,42 @@ var io = require('socket.io').listen(http);
 
 var clientNumber = 0;
 var clients = [];
+var rooms = [];
+rooms[0] = {room:'welcome' ,connectedClients:[]};
+
 
 io.on('connection',function(socket){
     socket.nickname = assignNickname();
 
     io.sockets.emit('update clients', clients);
+    io.sockets.emit('update rooms', rooms);
     
     socket.on('send',function(data){
-        io.sockets.emit('new message', socket.nickname + ": " + data);
+        io.sockets.to(socket.currentRoom).emit('new message', socket.nickname + ": " + escapeHTML(data));
+    });
+    
+    socket.on('change room', function(data){
+       if(findRoomIndex(data) != -1){
+           socket.leave(socket.currentRoom);
+           socket.join(data);
+           socket.currentRoom = data;
+           var index = findRoomIndex(data);
+           rooms[index].connectedClients.push(socket.nickname);
+           io.sockets.emit('update rooms', rooms);
+           io.sockets.to(socket.currentRoom).emit('update clients', rooms[index].connectedClients);
+           io.sockets.to(socket.currentRoom).emit('new message', 'User <b>' + socket.nickname + '</b> has joined room <b>' + socket.currentRoom + '</b>.');
+           console.log(socket.currentRoom + "  " + socket.nickname)
+           console.log("2");
+           /* TO DO : delete from previous room*/
+       } else{
+           /* create new room*/
+           console.log('ne dela');
+       }
     });
     
     socket.on('change nickname',function(newNickname){
         if(containsNickname(newNickname)){
-            var notice = "<i>Please chose a unique nickname<i/>";
+            var notice = "<i>This nickname has already been taken, please choose a diffrent one.<i/>";
             socket.emit('new message', notice);
         }else{
             clients[clients.indexOf(socket.nickname)] = newNickname;
@@ -36,6 +61,15 @@ io.on('connection',function(socket){
         io.sockets.emit('update clients', clients);
     });
 });
+
+function findRoomIndex(room){
+    for(var i in rooms){
+        if(rooms[i].room === room){
+            return i;
+        }
+    }
+    return -1;
+}
 
 
 function assignNickname(){
@@ -65,14 +99,13 @@ if(!process.env.PORT)
 var visits = 0;  
    
    
-app.use(express.static(path.join(__dirname, 'views')));
-app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
+app.use(express.static(__dirname + '/views'))
 
 app.get('/',function(req,res){
     visits++;
     console.log(visits);
-    res.render('index.ejs');
+    res.render(__dirname + '/views/index.ejs');
 });
 
 app.get('/chat',function(req,res){
