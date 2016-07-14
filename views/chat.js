@@ -7,7 +7,6 @@ $(document).ready(function(){
     var clientList = $("#clientList");
     var roomsList = $("#channelList");
     
-    socket.emit('change room', 'welcome');
     
     sendButton.click(function(e){
         e.preventDefault();
@@ -29,12 +28,16 @@ $(document).ready(function(){
         
     });
     
+    
     socket.on('update clients',function(nicknames){
         clientList.empty();
         for(var id in nicknames){
             clientList.append(nicknames[id] + "<br />");
         }
-        console.log("nic:" + nicknames);
+        console.log("nicknames client:")
+        for(var i in nicknames){
+            console.log("nic:" + nicknames[i]);
+        }
     });
     
     

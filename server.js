@@ -7,6 +7,9 @@ var path = require('path');
 var http = require('http').createServer(app);
 var io = require('socket.io').listen(http);
 
+if(!process.env.PORT)
+    process.env.PORT = 8080;
+
 
 /* SOCKET.IO  */
 
@@ -21,50 +24,71 @@ io.on('connection',function(socket){
 
     io.sockets.emit('update clients', clients);
     io.sockets.emit('update rooms', rooms);
-    
+    socket.join(rooms[0].room);
+    socket.currentRoom = rooms[0].room;
+    rooms[0].connectedClients.push(socket.nickname);
+    io.sockets.emit('update rooms', rooms);
+    io.sockets.to(socket.currentRoom).emit('update clients', rooms[0].connectedClients);
+    io.sockets.to(socket.currentRoom).emit('new message', 'User <b>' + socket.nickname + '</b> has joined room <b>' + socket.currentRoom + '</b>.');    
+
     socket.on('send',function(data){
         io.sockets.to(socket.currentRoom).emit('new message', socket.nickname + ": " + escapeHTML(data));
     });
     
     socket.on('change room', function(data){
+        var index;
        if(findRoomIndex(data) != -1){
+           index = findRoomIndex(socket.currentRoom);
+           rooms[index].connectedClients.splice(socket.nickname,1);
+           io.sockets.to(socket.currentRoom).emit('update clients', rooms[index].connectedClients);
            socket.leave(socket.currentRoom);
            socket.join(data);
            socket.currentRoom = data;
-           var index = findRoomIndex(data);
+           index = findRoomIndex(data);
            rooms[index].connectedClients.push(socket.nickname);
            io.sockets.emit('update rooms', rooms);
            io.sockets.to(socket.currentRoom).emit('update clients', rooms[index].connectedClients);
            io.sockets.to(socket.currentRoom).emit('new message', 'User <b>' + socket.nickname + '</b> has joined room <b>' + socket.currentRoom + '</b>.');
-           console.log(socket.currentRoom + "  " + socket.nickname)
-           console.log("2");
-           /* TO DO : delete from previous room*/
        } else{
-           /* create new room*/
-           console.log('ne dela');
+           index = findRoomIndex(socket.currentRoom);
+           rooms[index].connectedClients.splice(socket.nickname,1);
+           io.sockets.to(socket.currentRoom).emit('update clients', rooms[index].connectedClients);
+           var newRoom = {room: data, connectedClients : []};
+           rooms.push(newRoom);
+           rooms[rooms.length - 1].connectedClients.push(socket.nickname);
+           socket.leave(socket.currentRoom);
+           socket.join(data);
+           socket.currentRoom = data;
+           io.sockets.emit('update rooms', rooms);
+           io.sockets.to(socket.currentRoom).emit('update clients', rooms[rooms.length - 1].connectedClients);
+           io.sockets.to(socket.currentRoom).emit('new message', 'User <b>' + socket.nickname + '</b> has joined room <b>' + socket.currentRoom + '</b>.');
+           console.log(rooms.length - 1)
        }
     });
     
     socket.on('change nickname',function(newNickname){
         if(containsNickname(newNickname)){
-            var notice = "<i>This nickname has already been taken, please choose a diffrent one.<i/>";
+            var notice = "<i>This nickname has already been taken, please choose a different one.<i/>";
             socket.emit('new message', notice);
         }else{
             clients[clients.indexOf(socket.nickname)] = newNickname;
+            var index = findRoomIndex(socket.currentRoom);
+            rooms[index].connectedClients[rooms[index].connectedClients.indexOf(socket.nickname)] = newNickname;
             socket.nickname = newNickname;
-            io.sockets.emit('update clients', clients);
+            io.sockets.to(socket.currentRoom).emit('update clients', rooms[index].connectedClients);
         }
     });
     
     socket.on('disconnect',function(){
         clients.splice(clients.indexOf(socket.nickname),1);
-        io.sockets.emit('update clients', clients);
+        var index = findRoomIndex(socket.currentRoom);
+        io.sockets.emit('update clients', rooms[index].connectedClients.splice(socket.nickname,1));
     });
 });
 
 function findRoomIndex(room){
     for(var i in rooms){
-        if(rooms[i].room === room){
+        if(rooms[i].room == room){
             return i;
         }
     }
@@ -91,10 +115,6 @@ function containsNickname(nickname){
 /* WEBSITE ROUTING AND VISIT COUNT */
 
 var visits = 0;
-
-if(!process.env.PORT)
-    process.env.PORT = 8080;
-    
   
 var visits = 0;  
    
@@ -116,7 +136,7 @@ app.get('/index',function(req,res){
     res.render('index.ejs');
 });
  
-http.listen(process.env.PORT,function(){
+http.listen(process.env.PORT,process.env.IP,function(){
     console.log("Server listening on PORT " + process.env.PORT);
 });
 
