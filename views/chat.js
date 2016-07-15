@@ -16,6 +16,7 @@ $(document).ready(function(){
             socket.emit('change nickname', capitalize(messageInput.val().split(' ')[1]));
         }
         else if(messageInput.val().split(' ')[0] === ('/room')){
+            messagesWindow.empty();
             socket.emit('change room', messageInput.val().split(' ')[1]);
         }
         else{
@@ -24,8 +25,11 @@ $(document).ready(function(){
         messageInput.val('');
     });
     
-    socket.on('update rooms',function(){
-        
+    socket.on('update rooms',function(rooms){
+        roomsList.empty();
+        for(var room in rooms){
+            roomsList.append(rooms[room].room + "<br />");
+        }
     });
     
     
@@ -34,15 +38,12 @@ $(document).ready(function(){
         for(var id in nicknames){
             clientList.append(nicknames[id] + "<br />");
         }
-        console.log("nicknames client:")
-        for(var i in nicknames){
-            console.log("nic:" + nicknames[i]);
-        }
     });
     
     
     socket.on('new message',function(data){
         messagesWindow.append(data + "<br />");
+        messagesWindow.scrollTop(messagesWindow.prop("scrollHeight"));
     });
     
     function capitalize(data){

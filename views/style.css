@@ -47,7 +47,6 @@ body{
     margin-left: 25%;
     margin-top:15px;
     height: 400px;
-    background-color: red;
     overflow:hidden;
     border-radius:5px;
     box-shadow:1px 1px 10px 3px #BBB;
@@ -159,36 +158,62 @@ body{
 /* CHAT Style */
 
 #chatContainer {
-    width:50%;
+    width:49%;
     margin-left: 25%;
     margin-top:20px;
-    background-color: lightgrey;
+    padding:0.5%;
+    border-radius:5px;
+    box-shadow:1px 1px 10px 3px #BBB;
+    border:1px solid #777; 
+    background-color:#fff;
+}
+
+#chatContainer input {
+    margin-top:10px;
+    width:70%;
+    height:28px;
+    padding-left:5px;
+   
+}
+
+#chatContainer button {
+    height:32px;
+    width:8.5%;
 }
 
 #messagesWindow{
-    width: 80%;
-    height: 500px;
+    width: 78.5%;
+    margin-right:1%;
+    height: 490px;
     float:left;
-    border:1px solid black;
-    overflow-y: scroll;
+    overflow-y: auto;
     word-wrap: break-word;
+    border-radius:5px;
+    padding:5px;
+    font-size: 15px;
 }
 
 #clientList{
-    width: 19%;
+    width: 18.5%;
     float:right;
-    height: 240px;
-    border:1px solid black;
+    height: 245px;
     word-wrap: break-word;
+    border-radius:5px;
+    background-color: #f2f2f2;
+    padding:5px 0 0 5px;
+    color: #ff751a;
 }
 
 #channelList{
-    width: 19%;
+    width: 18.5%;
     float:right;
-    margin-top:15px;
-    height: 245px;
-    border:1px solid black;
+    margin-top:5px;
+    height: 240px;
     word-wrap: break-word;
+    border-radius:5px;
+    background-color: #f2f2f2;
+    padding:5px 0 0 5px;
+    color: #ff751a;
 }
 
 

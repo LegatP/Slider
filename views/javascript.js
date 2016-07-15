@@ -17,7 +17,8 @@ $(document).ready(function() {
     var animationRunning = false;
     
     $(".changeSlide").click(function(){
-        changeSlide($(this).attr('tag'));
+        changeSlide($(this).data('nr'));
+        console.log($(this).data('nr'));
         restartTimer();
     });
   
@@ -32,25 +33,24 @@ $(document).ready(function() {
         },4100);
     }
   
-    function changeSlide(tag){
-       
+    function changeSlide(data){
        if(animationRunning){
-           /* DO NOTHING, ANIMATION RUNNING*/
+           /* DO NOTHING, ANIMATION RUNNIN*/
        }else{
             animationRunning = true;
             previousSlide = currentSlide;
-            if(tag == "next"){
+            if(data == "next"){
                 currentSlide++;
                 if(currentSlide > numberOfSlides){
                 currentSlide = 1;
                 }
-            }else if(tag == "previous"){
+            }else if(data == "previous"){
                 currentSlide--;
                 if(currentSlide < 1){
                 currentSlide = numberOfSlides;
                 }        
             }else{
-                currentSlide = parseInt(tag,10);
+                currentSlide = parseInt(data,10);
                 
             }
             
@@ -78,8 +78,8 @@ $(document).ready(function() {
               
               
             $("#slide").html(
-                    '<img style="z-index:1" src="/slides/slide' + currentSlide + '.jpg" />' +
-                    '<img style="z-index:2" id="fade" src="/slides/slide' + previousSlide + '.jpg" />'        
+                    '<img style="z-index:1" src="/slides/slide' + currentSlide + '.jpg" alt="slide"/>' +
+                    '<img style="z-index:2" id="fade" src="/slides/slide' + previousSlide + '.jpg" alt="slide"/>'        
                 );
              $("#fade").animate({
                 opacity:0,

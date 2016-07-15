@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="sl">
 <head>
     <title>Website template</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
@@ -10,11 +10,8 @@
 <body>
     <div id="navigation">
         <ul>
-            <li><a href="/index">HOME</a></li>
-            <li><a href="/index">ABOUT</a></li>
+            <li><a href="/index">SLIDER</a></li>
             <li><a href="/chat">CHAT</a></li>
-            <li><a href="/index">SERVICES</a></li>
-            <li><a href="www.facebook.com">CONTACT</a></li>
         </ul>
     </div>
     <div id="slider">
@@ -27,13 +24,13 @@
                 Praesent faucibus metus turpis.
             </div>
         </div>
-        <img src="graphics/arrow_left.png" style="left:30px;z-index:3;width:30px;margin-top:170px;cursor:pointer;" class="changeSlide" tag="previous"></img>
-        <img src="graphics/arrow_right.png" style="right:30px;z-index:3;width:30px;margin-top:170px;cursor:pointer;" class="changeSlide" tag="next"></img>
+        <img src="graphics/arrow_left.png" style="left:30px;z-index:3;width:30px;margin-top:170px;cursor:pointer;" class="changeSlide" data-nr="previous" alt="arrow_left"></img>
+        <img src="graphics/arrow_right.png" style="right:30px;z-index:3;width:30px;margin-top:170px;cursor:pointer;" class="changeSlide" data-nr="next" alt="arrow_right"></img>
         <ul>
-            <li><img src="graphics/circle.png" class="changeSlide" tag="1"></img></li>
-            <li><img src="graphics/circle.png" class="changeSlide" tag="2"></img></li>
-            <li><img src="graphics/circle.png" class="changeSlide" tag="3"></img></li>
-            <li><img src="graphics/circle.png" class="changeSlide" tag="4"></img></li>
+            <li><img src="graphics/circle.png" class="changeSlide" data-nr="1" alt="cricle"></img></li>
+            <li><img src="graphics/circle.png" class="changeSlide" data-nr="2" alt="circle"></img></li>
+            <li><img src="graphics/circle.png" class="changeSlide" data-nr="3" alt="circle"></img></li>
+            <li><img src="graphics/circle.png" class="changeSlide" data-nr="4" alt="circle4"></img></li>
             <!--
             <li><input type="button" class="changeSlide" tag="1"></li>
             <li><input type="button" class="changeSlide" tag="2"></li>
@@ -42,8 +39,8 @@
             -->
         </ul>
         <div id="slide">
-            <img style="z-index:2" id="fade" src="/slides/slide1.jpg" />
-            <img style="z-index:1" src="/slides/slide2.jpg" />
+            <img style="z-index:2" id="fade" src="/slides/slide1.jpg" alt="slide"/>
+            <img style="z-index:1" src="/slides/slide2.jpg" alt="slide"/>
         </div>
     </div>
     <div id="servicesContainer">

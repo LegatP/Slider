@@ -16,14 +16,12 @@ if(!process.env.PORT)
 var clientNumber = 0;
 var clients = [];
 var rooms = [];
-rooms[0] = {room:'welcome' ,connectedClients:[]};
+rooms[0] = {room:'Welcome' ,connectedClients:[]};
 
 
 io.on('connection',function(socket){
     socket.nickname = assignNickname();
 
-    io.sockets.emit('update clients', clients);
-    io.sockets.emit('update rooms', rooms);
     socket.join(rooms[0].room);
     socket.currentRoom = rooms[0].room;
     rooms[0].connectedClients.push(socket.nickname);
@@ -32,15 +30,15 @@ io.on('connection',function(socket){
     io.sockets.to(socket.currentRoom).emit('new message', 'User <b>' + socket.nickname + '</b> has joined room <b>' + socket.currentRoom + '</b>.');    
 
     socket.on('send',function(data){
-        io.sockets.to(socket.currentRoom).emit('new message', socket.nickname + ": " + escapeHTML(data));
+        io.sockets.to(socket.currentRoom).emit('new message', "<b>" + socket.nickname + "</b>"  + ": " + escapeHTML(data));
     });
     
     socket.on('change room', function(data){
         var index;
+        index = findRoomIndex(socket.currentRoom);
+        rooms[index].connectedClients.splice(socket.nickname,1);
+        io.sockets.to(socket.currentRoom).emit('update clients', rooms[index].connectedClients);
        if(findRoomIndex(data) != -1){
-           index = findRoomIndex(socket.currentRoom);
-           rooms[index].connectedClients.splice(socket.nickname,1);
-           io.sockets.to(socket.currentRoom).emit('update clients', rooms[index].connectedClients);
            socket.leave(socket.currentRoom);
            socket.join(data);
            socket.currentRoom = data;
@@ -50,9 +48,6 @@ io.on('connection',function(socket){
            io.sockets.to(socket.currentRoom).emit('update clients', rooms[index].connectedClients);
            io.sockets.to(socket.currentRoom).emit('new message', 'User <b>' + socket.nickname + '</b> has joined room <b>' + socket.currentRoom + '</b>.');
        } else{
-           index = findRoomIndex(socket.currentRoom);
-           rooms[index].connectedClients.splice(socket.nickname,1);
-           io.sockets.to(socket.currentRoom).emit('update clients', rooms[index].connectedClients);
            var newRoom = {room: data, connectedClients : []};
            rooms.push(newRoom);
            rooms[rooms.length - 1].connectedClients.push(socket.nickname);
@@ -62,7 +57,6 @@ io.on('connection',function(socket){
            io.sockets.emit('update rooms', rooms);
            io.sockets.to(socket.currentRoom).emit('update clients', rooms[rooms.length - 1].connectedClients);
            io.sockets.to(socket.currentRoom).emit('new message', 'User <b>' + socket.nickname + '</b> has joined room <b>' + socket.currentRoom + '</b>.');
-           console.log(rooms.length - 1)
        }
     });
     
@@ -74,6 +68,7 @@ io.on('connection',function(socket){
             clients[clients.indexOf(socket.nickname)] = newNickname;
             var index = findRoomIndex(socket.currentRoom);
             rooms[index].connectedClients[rooms[index].connectedClients.indexOf(socket.nickname)] = newNickname;
+            io.sockets.to(socket.currentRoom).emit('new message', "User <b>" + socket.nickname + "</b> has changed their nickname to <b>" + newNickname + "</b>." );
             socket.nickname = newNickname;
             io.sockets.to(socket.currentRoom).emit('update clients', rooms[index].connectedClients);
         }
