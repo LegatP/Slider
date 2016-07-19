@@ -181,6 +181,8 @@ body{
     width:8.5%;
 }
 
+
+
 #messagesWindow{
     width: 78.5%;
     margin-right:1%;
@@ -200,6 +202,7 @@ body{
     word-wrap: break-word;
     border-radius:5px;
     background-color: #f2f2f2;
+    border:1px solid #cfcfcf;
     padding:5px 0 0 5px;
     color: #ff751a;
 }
@@ -212,8 +215,40 @@ body{
     word-wrap: break-word;
     border-radius:5px;
     background-color: #f2f2f2;
+    border:1px solid #cfcfcf;
     padding:5px 0 0 5px;
     color: #ff751a;
+}
+
+#chatCommands{
+    max-width:50%;
+    margin-left: 25%;
+    margin-top:40px;
+    min-height: 200px;
+}
+
+#chatCommands h2{
+    font-size: 17px;
+}
+
+#chatCommands table{
+    border-collapse: collapse;
+    font-size: 15px;
+}
+
+#chatCommands table, td, th{
+    border:1px solid #888;
+}
+
+#chatCommands table th{
+    background-color:#ff751a;
+    color:#fff;
+    padding:10px;
+}
+
+#chatCommands table tr td{
+    padding:10px;
+    background-color: #f2f2f2;
 }
 
 
